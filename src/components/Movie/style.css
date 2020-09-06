@@ -1,0 +1,9 @@
+.ant-card-body {
+  display: flex;
+}
+.ant-image-img {
+  width: 180px;
+}
+.text-content {
+  padding-left: 10px;
+}
