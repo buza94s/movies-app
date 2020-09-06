@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import 'antd/dist/antd.css';
 import './style.css';
 import { Card, Image, Typography } from 'antd';
+import noimg from './noimg.jpg';
 import HelperFunction from '../../api/HelperFunction';
 
 const { Title, Text, Link } = Typography;
@@ -27,7 +28,10 @@ export default class Movie extends Component {
     return (
       <div className="movie">
         <Card size="small" hoverable>
-          <Image src={`http://image.tmdb.org/t/p/w440_and_h660_face/${poster_path}`} />
+          <Image
+            height={270}
+            src={poster_path ? `http://image.tmdb.org/t/p/w440_and_h660_face/${poster_path}` : noimg}
+          />
           <div className="text-content">
             <Title level={4}>{title}</Title>
             <div>

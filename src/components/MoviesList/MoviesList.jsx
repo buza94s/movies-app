@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'antd';
+import { Col, Alert } from 'antd';
 import Movie from '../Movie';
 import './style.css';
 
@@ -25,6 +25,19 @@ export default class App extends Component {
         </Col>
       );
     });
-    return <div className="movies-list">{listMovie}</div>;
+    return (
+      <div className="movies-list">
+        {movies.length > 0 ? (
+          listMovie
+        ) : (
+          <Alert
+            message="Результатов нет"
+            description="К сожалению, по данному запросу результатов нет. Попробуйте найти что-нибудь другое."
+            type="info"
+            showIcon
+          />
+        )}
+      </div>
+    );
   }
 }
