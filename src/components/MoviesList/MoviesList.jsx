@@ -20,7 +20,7 @@ export default class App extends Component {
     const listMovie = movies.map((movie) => {
       const { id, title, overview, poster_path, release_date } = movie;
       return (
-        <Col span={10} key={id} style={{ marginTop: 16 }}>
+        <Col xs={{ span: 18 }} sm={{ span: 10 }} key={id} style={{ marginTop: 16 }}>
           <Movie title={title} overview={overview} poster_path={poster_path} release_date={release_date} />
         </Col>
       );
