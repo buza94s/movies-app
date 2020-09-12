@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Pagination } from 'antd';
-import MoviesList from '../MoviesList';
+import MoviesList from '../../MoviesList';
 
 const { Search } = Input;
 const ContentApp = ({ searchInput, searchMovies, searchMoviesInput, movies, currentPage, onPagination, totalPage }) => (
@@ -21,7 +21,6 @@ const ContentApp = ({ searchInput, searchMovies, searchMoviesInput, movies, curr
       total={movies.length * totalPage}
       showSizeChanger={false}
     />
-    ;
   </div>
 );
 ContentApp.defaultdefaultProps = {

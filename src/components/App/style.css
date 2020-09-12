@@ -1,7 +1,6 @@
 .container {
-  background: #f7f7f7;
-  margin    : 0 auto;
-  max-width : 1240px;
+  margin   : 0 auto;
+  max-width: 1240px;
 }
 
 .example {
@@ -29,4 +28,14 @@
 .ant-spin-dot.ant-spin-dot-spin {
   position: absolute;
   top     : 50%;
+}
+
+.ant-pagination {
+  display        : flex;
+  justify-content: center;
+  padding        : 10px;
+}
+
+.ant-input-search {
+  margin-top: 10px;
 }

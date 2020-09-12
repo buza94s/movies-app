@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Spin, Alert, Input } from 'antd';
 import * as _ from 'lodash';
-import ContentApp from './ContentApp';
+import ContentApp from './ContentApp/ContentApp';
 import './style.css';
 import ApiMovies from '../../api';
 
@@ -17,6 +17,8 @@ export default class App extends Component {
     currentPage: 1,
     internet: true,
   };
+
+  debounceSearchMovies = _.debounce(this.searchMovies.bind(this), 700);
 
   componentDidMount() {
     this.onInternetAddEvent();
@@ -76,15 +78,16 @@ export default class App extends Component {
     this.setState({ internet: !internet });
   }
 
-  searchMovies = (newSearch) => {
+  searchMoviesInput = (searchInput) => {
+    this.setState({ searchInput });
+    this.debounceSearchMovies(searchInput);
+  };
+
+  searchMovies(newSearch) {
     const { search } = this.state;
     if (newSearch === search) this.setState({ search: newSearch, searchInput: '' });
     else this.setState({ isLoaded: true, search: newSearch, searchInput: '' });
-  };
-
-  searchMoviesInput = (searchInput) => {
-    this.setState({ searchInput });
-  };
+  }
 
   errorAlert() {
     this.setState({ search: '', isLoaded: false, error: true });
@@ -99,13 +102,14 @@ export default class App extends Component {
     }
     if (search === '') {
       return (
-        <div>
+        <div className="container">
           <Search
             placeholder="Начните поиск"
             size="large"
             value={searchInput}
-            onChange={(event) => this.searchMoviesInput(event.target.value)}
-            onPressEnter={(event) => this.searchMovies(event.target.value)}
+            onChange={(event) => {
+              this.searchMoviesInput(event.target.value);
+            }}
           />
           <Alert
             message="Начните поиск фильма"
