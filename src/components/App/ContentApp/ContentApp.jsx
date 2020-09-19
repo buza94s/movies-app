@@ -2,37 +2,67 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Pagination } from 'antd';
 import MoviesList from '../../MoviesList';
+import TopPanel from '../../TopPanel';
 
-const { Search } = Input;
-const ContentApp = ({ searchInput, searchMovies, searchMoviesInput, movies, currentPage, onPagination, totalPage }) => (
+const ContentApp = ({
+  searchInput,
+  searchMovies,
+  searchMoviesInput,
+  movies,
+  currentPage,
+  onPagination,
+  totalPage,
+  onPushRate,
+  topPanel,
+  onTopPanel,
+}) => (
   <div className="container">
-    <Search
-      placeholder="Начните поиск"
-      size="large"
-      value={searchInput}
-      onChange={(event) => searchMoviesInput(event.target.value)}
-      onPressEnter={(event) => searchMovies(event.target.value)}
-    />
-    <MoviesList movies={movies} />
-    <Pagination
-      pageSize={20}
-      current={currentPage}
-      onChange={onPagination}
-      total={movies.length * totalPage}
-      showSizeChanger={false}
-    />
+    <TopPanel topPanel={topPanel} onTopPanel={onTopPanel} />
+    {!topPanel ? (
+      <Input
+        autoFocus
+        placeholder="Начните поиск"
+        size="large"
+        value={searchInput}
+        onChange={(event) => searchMoviesInput(event.target.value)}
+        onPressEnter={(event) => searchMovies(event.target.value)}
+      />
+    ) : null}
+
+    <MoviesList movies={movies} onPushRate={onPushRate} topPanel={topPanel} />
+    {!topPanel ? (
+      <Pagination
+        pageSize={20}
+        current={currentPage}
+        onChange={onPagination}
+        total={movies.length * totalPage}
+        showSizeChanger={false}
+      />
+    ) : null}
   </div>
 );
 ContentApp.defaultdefaultProps = {
   searchInput: '',
+  topPanel: false,
   searchMovies: () => {},
   searchMoviesInput: () => {},
   movies: [],
+  currentPage: 1,
+  totalPage: 1,
+  onPagination: () => {},
+  onPushRate: () => {},
+  onTopPanel: () => {},
 };
 ContentApp.propTypes = {
   searchInput: PropTypes.string.isRequired,
+  topPanel: PropTypes.bool.isRequired,
   searchMovies: PropTypes.func.isRequired,
   searchMoviesInput: PropTypes.func.isRequired,
   movies: PropTypes.arrayOf.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  totalPage: PropTypes.number.isRequired,
+  onPagination: PropTypes.func.isRequired,
+  onPushRate: PropTypes.func.isRequired,
+  onTopPanel: PropTypes.func.isRequired,
 };
 export default ContentApp;

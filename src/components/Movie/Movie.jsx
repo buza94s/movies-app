@@ -4,48 +4,81 @@ import { format } from 'date-fns';
 import 'antd/dist/antd.css';
 import './style.css';
 import { Card, Image, Typography } from 'antd';
+import HelperFunction from '../../system/HelperFunction';
 import noimg from './noimg.jpg';
-import HelperFunction from '../../api/HelperFunction';
+import RateCust from './RateCust';
 
-const { Title, Text, Link } = Typography;
+const { Title, Text } = Typography;
 const helpers = new HelperFunction();
 export default class Movie extends Component {
   state = {};
 
   static defaultProps = {
+    id: 0,
     title: '',
-    release_date: new Date(),
+    overview: '',
+    posterPath: '',
+    releaseDate: new Date(),
+    rating: 0,
+    voteAverage: 0,
+    moviesGenres: [],
+    genreIds: [],
+    onPushRate: () => {},
   };
 
   static propTypes = {
+    id: PropTypes.number,
     title: PropTypes.string,
-    release_date: PropTypes.instanceOf(),
+    overview: PropTypes.string,
+    posterPath: PropTypes.string,
+    releaseDate: PropTypes.instanceOf(),
+    rating: PropTypes.number,
+    voteAverage: PropTypes.number,
+    moviesGenres: PropTypes.arrayOf,
+    genreIds: PropTypes.arrayOf,
+    onPushRate: PropTypes.func,
   };
 
   render() {
-    const { title, overview, poster_path, release_date } = this.props;
-    const description = helpers.Cutdescription(overview);
+    const {
+      id,
+      title,
+      overview,
+      posterPath,
+      releaseDate,
+      onPushRate,
+      rating,
+      voteAverage,
+      moviesGenres,
+      genreIds,
+    } = this.props;
+    const description = helpers.custdescription(overview);
+    const colorRate = helpers.getColorRate(voteAverage);
+    const genres = moviesGenres.filter((item) => genreIds.includes(item.id));
+    const genersContent = genres.map((item) => {
+      return (
+        <Text code key={item.id}>
+          {item.name}
+        </Text>
+      );
+    });
     return (
       <div className="movie">
         <Card size="small" hoverable>
-          <Image
-            height={270}
-            src={poster_path ? `http://image.tmdb.org/t/p/w440_and_h660_face/${poster_path}` : noimg}
-          />
+          <Image height={270} src={posterPath ? `http://image.tmdb.org/t/p/w440_and_h660_face/${posterPath}` : noimg} />
           <div className="text-content">
             <Title level={4}>{title}</Title>
             <div>
               <Text type="secondary">
-                {release_date ? format(new Date(release_date), 'MM/dd/yyyy') : 'Дата не определена'}
+                {releaseDate ? format(new Date(releaseDate), 'MM/dd/yyyy') : 'Дата не определена'}
               </Text>
             </div>
-            <Link href="#">
-              <Text code>Action</Text>
-            </Link>
-            <Link href="#">
-              <Text code>Drama</Text>
-            </Link>
+            <div>{genersContent}</div>
             <div>{description}</div>
+            <RateCust onPushRate={onPushRate} id={id} rating={rating} />
+          </div>
+          <div className="rate" style={colorRate}>
+            {voteAverage}
           </div>
         </Card>
       </div>

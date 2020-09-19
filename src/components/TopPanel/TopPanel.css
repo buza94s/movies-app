@@ -1,0 +1,23 @@
+button {
+  all: unset;
+}
+.top-panel {
+  display: flex;
+  padding: 20px 0;
+  justify-content: center;
+}
+.top-button {
+  padding: 0 5px;
+  font-weight: 600;
+  border-bottom: 1px solid;
+}
+.top-button:hover {
+  cursor: pointer;
+}
+.top-panel__top-button {
+  margin-left: 10px;
+}
+.active {
+  color: #1890ff;
+  border-bottom: 1px solid;
+}
