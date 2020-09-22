@@ -39,7 +39,7 @@ export default class App extends Component {
         genre_ids: genreIds,
       } = movie;
       return (
-        <Col xs={{ span: 18 }} sm={{ span: 10 }} key={id} style={{ marginTop: 16 }}>
+        <Col sm={{ span: 18 }} lg={{ span: 10 }} key={id} style={{ marginTop: 16 }}>
           <Consumer>
             {(moviesGenres) => {
               return (

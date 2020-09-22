@@ -17,7 +17,7 @@ export default class Movie extends Component {
     id: 0,
     title: '',
     overview: '',
-    posterPath: '',
+    posterParh: '',
     releaseDate: new Date(),
     rating: 0,
     voteAverage: 0,
@@ -30,7 +30,7 @@ export default class Movie extends Component {
     id: PropTypes.number,
     title: PropTypes.string,
     overview: PropTypes.string,
-    posterPath: PropTypes.string,
+    posterParh: PropTypes.string,
     releaseDate: PropTypes.instanceOf(),
     rating: PropTypes.number,
     voteAverage: PropTypes.number,
@@ -44,7 +44,7 @@ export default class Movie extends Component {
       id,
       title,
       overview,
-      posterPath,
+      posterParh,
       releaseDate,
       onPushRate,
       rating,
@@ -65,7 +65,7 @@ export default class Movie extends Component {
     return (
       <div className="movie">
         <Card size="small" hoverable>
-          <Image height={270} src={posterPath ? `http://image.tmdb.org/t/p/w440_and_h660_face/${posterPath}` : noimg} />
+          <Image height={270} src={posterParh ? `http://image.tmdb.org/t/p/w440_and_h660_face/${posterParh}` : noimg} />
           <div className="text-content">
             <Title level={4}>{title}</Title>
             <div>
