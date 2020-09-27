@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spin, Alert, Input } from 'antd';
+import { Alert, Input } from 'antd';
 import * as _ from 'lodash';
 import ContentApp from './ContentApp/ContentApp';
 import './style.css';
@@ -13,7 +13,7 @@ export default class App extends Component {
     moviesRate: [],
     moviesGenres: [],
     topPanel: false,
-    isLoaded: true,
+    loading: true,
     searchInput: '',
     search: '',
     error: false,
@@ -25,19 +25,17 @@ export default class App extends Component {
 
   debounceSearchMovies = _.debounce(this.searchMovies.bind(this), 700);
 
-  apiKey = '356f4b0d2eb12b4eb2d7631c1eb1594d';
-
   componentDidMount() {
     this.onInternetAddEvent();
     const newState = new ApiMovies();
     newState
-      .getResource(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${this.apiKey}`)
+      .getGuestSession()
       .then((res) => {
         this.setState({ userSession: res.guest_session_id });
       })
       .catch(this.errorAlert.bind(this));
     newState
-      .getResource(`https://api.themoviedb.org/3/genre/movie/list?api_key=${this.apiKey}`)
+      .getGenre()
       .then((res) => {
         this.setState({ moviesGenres: res.genres });
       })
@@ -53,14 +51,12 @@ export default class App extends Component {
       const newState = new ApiMovies();
 
       newState
-        .getResource(
-          `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&language=ru-RU&page=${currentPage}&include_adult=false&query=${search}`
-        )
+        .getMovies(currentPage, search)
         .then((res) => {
           this.setState(() => {
             return {
               movies: res.results,
-              isLoaded: false,
+              loading: false,
               error: false,
               totalPage: res.total_pages,
             };
@@ -101,11 +97,9 @@ export default class App extends Component {
     const { userSession } = this.state;
     const getMoviesRate = new ApiMovies();
     getMoviesRate
-      .getResource(
-        `https://api.themoviedb.org/3/guest_session/${userSession}/rated/movies?api_key=${this.apiKey}&language=en-US&sort_by=created_at.asc`
-      )
+      .getMoviesRate(userSession)
       .then((res) => {
-        this.setState({ moviesRate: res.results, isLoaded: false, error: false });
+        this.setState({ moviesRate: res.results, loading: false, error: false });
       })
       .catch(this.errorAlert.bind(this));
   };
@@ -136,18 +130,18 @@ export default class App extends Component {
   searchMovies(newSearch) {
     const { search } = this.state;
     if (newSearch === search) this.setState({ search: newSearch, searchInput: '' });
-    else this.setState({ isLoaded: true, search: newSearch, searchInput: '' });
+    else this.setState({ loading: true, search: newSearch, searchInput: '' });
   }
 
   errorAlert() {
-    this.setState({ search: '', isLoaded: false, error: true });
+    this.setState({ search: '', loading: false, error: true });
   }
 
   render() {
     const {
       movies,
       moviesRate,
-      isLoaded,
+      loading,
       search,
       searchInput,
       error,
@@ -185,13 +179,6 @@ export default class App extends Component {
         </div>
       );
     }
-    if (isLoaded) {
-      return (
-        <div className="example">
-          <Spin size="large" />
-        </div>
-      );
-    }
     return !error ? (
       <Provider value={moviesGenres}>
         <ContentApp
@@ -206,6 +193,7 @@ export default class App extends Component {
           onPushRate={this.onPushRate}
           topPanel={topPanel}
           onTopPanel={this.onTopPanel}
+          loading={loading}
         />
       </Provider>
     ) : (

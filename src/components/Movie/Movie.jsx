@@ -4,12 +4,11 @@ import { format } from 'date-fns';
 import 'antd/dist/antd.css';
 import './style.css';
 import { Card, Image, Typography } from 'antd';
-import HelperFunction from '../../system/HelperFunction';
+import { custDescription, getColorRate } from '../../system/HelperFunction';
 import noimg from './noimg.jpg';
 import RateCust from './RateCust';
 
 const { Title, Text } = Typography;
-const helpers = new HelperFunction();
 export default class Movie extends Component {
   state = {};
 
@@ -52,8 +51,8 @@ export default class Movie extends Component {
       moviesGenres,
       genreIds,
     } = this.props;
-    const description = helpers.custdescription(overview);
-    const colorRate = helpers.getColorRate(voteAverage);
+    const description = custDescription(overview);
+    const colorRate = getColorRate(voteAverage);
     const genres = moviesGenres.filter((item) => genreIds.includes(item.id));
     const genersContent = genres.map((item) => {
       return (

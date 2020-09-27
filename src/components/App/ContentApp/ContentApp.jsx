@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, Pagination } from 'antd';
+import { Spin, Input, Pagination } from 'antd';
 import MoviesList from '../../MoviesList';
 import TopPanel from '../../TopPanel';
 
@@ -15,6 +15,7 @@ const ContentApp = ({
   onPushRate,
   topPanel,
   onTopPanel,
+  loading,
 }) => (
   <div className="container">
     <TopPanel topPanel={topPanel} onTopPanel={onTopPanel} />
@@ -29,7 +30,14 @@ const ContentApp = ({
       />
     ) : null}
 
-    <MoviesList movies={movies} onPushRate={onPushRate} topPanel={topPanel} />
+    {loading ? (
+      <div className="example">
+        <Spin size="large" />
+      </div>
+    ) : (
+      <MoviesList movies={movies} onPushRate={onPushRate} topPanel={topPanel} />
+    )}
+
     {!topPanel ? (
       <Pagination
         pageSize={20}
@@ -44,6 +52,7 @@ const ContentApp = ({
 ContentApp.defaultdefaultProps = {
   searchInput: '',
   topPanel: false,
+  loading: true,
   searchMovies: () => {},
   searchMoviesInput: () => {},
   movies: [],
@@ -56,6 +65,7 @@ ContentApp.defaultdefaultProps = {
 ContentApp.propTypes = {
   searchInput: PropTypes.string.isRequired,
   topPanel: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   searchMovies: PropTypes.func.isRequired,
   searchMoviesInput: PropTypes.func.isRequired,
   movies: PropTypes.arrayOf.isRequired,
